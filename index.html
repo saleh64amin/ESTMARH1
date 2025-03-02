@@ -8,11 +8,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            background: linear-gradient(to right, #e0c3fc, #8ec5fc); /* Changed to blue-purple (tuti) gradient */
         }
         .card {
             border-radius: 15px;
             transition: transform 0.3s ease;
+            max-width: 1200px !important; /* Updated max-width for larger screens */
         }
         .card:hover {
             transform: translateY(-5px);
@@ -42,68 +43,85 @@
             display: block;
             opacity: 1;
         }
+        /* Add new responsive grid styles */
+        @media (min-width: 768px) {
+            .form-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .form-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
     </style>
 </head>
 <body class="bg-light text-right">
     <div class="container py-5">
-        <div class="card shadow p-4 mx-auto" style="max-width: 500px;">
+        <div class="card shadow p-4 mx-auto">
             <h2 class="text-center mb-4">📋 استمارة واتساب</h2>
             <form id="whatsappForm">
-                <div class="mb-3">
-                    <label for="name" class="form-label">👤 الاسم:</label>
-                    <input type="text" id="name" class="form-control" required>
-                </div>
+                <div class="form-grid"> <!-- Added form-grid container -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">👤 الاسم:</label>
+                        <input type="text" id="name" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="weight" class="form-label">⚖️ الوزن (كجم):</label>
+                        <input type="number" id="weight" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="height" class="form-label">📏 الطول (سم):</label>
+                        <input type="number" id="height" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="age" class="form-label">🎂 العمر:</label>
+                        <input type="number" id="age" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">🚻 الجنس:</label>
+                        <select id="gender" class="form-select">
+                            <option value="ذكر">ذكر</option>
+                            <option value="أنثى">أنثى</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="status" class="form-label">📌 الحالة:</label>
+                        <select id="status" class="form-select">
+                            <option value="عادي">طبيعي</option>
+                            <option value="حامل">حامل</option>
+                            <option value="مرضع">مرضع</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="sport" class="form-label">🏋️‍♂️ هل تمارس الرياضة؟</label>
+                        <select id="sport" class="form-select">
+                            <option value="نعم">نعم</option>
+                            <option value="لا">لا</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3 sportType-container" id="sportTypeContainer">
+                        <label for="sportType" class="form-label">⚽ ما نوع الرياضة؟</label>
+                        <input type="text" id="sportType" class="form-control">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="meals" class="form-label">🍽️ عدد الوجبات في اليوم:</label>
+                        <input type="number" id="meals" class="form-control" required>
+                    </div>
+                </div> <!-- End of form-grid container -->
                 
-                <div class="mb-3">
-                    <label for="weight" class="form-label">⚖️ الوزن (كجم):</label>
-                    <input type="number" id="weight" class="form-control" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="height" class="form-label">📏 الطول (سم):</label>
-                    <input type="number" id="height" class="form-control" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="age" class="form-label">🎂 العمر:</label>
-                    <input type="number" id="age" class="form-control" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="gender" class="form-label">🚻 الجنس:</label>
-                    <select id="gender" class="form-select">
-                        <option value="ذكر">ذكر</option>
-                        <option value="أنثى">أنثى</option>
-                    </select>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="status" class="form-label">📌 الحالة:</label>
-                    <select id="status" class="form-select">
-                        <option value="عادي">طبيعي</option>
-                        <option value="حامل">حامل</option>
-                        <option value="مرضع">مرضع</option>
-                    </select>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="sport" class="form-label">🏋️‍♂️ هل تمارس الرياضة؟</label>
-                    <select id="sport" class="form-select">
-                        <option value="نعم">نعم</option>
-                        <option value="لا">لا</option>
-                    </select>
-                </div>
-                <div class="mb-3 sportType-container" id="sportTypeContainer">
-                    <label for="sportType" class="form-label">⚽ ما نوع الرياضة؟</label>
-                    <input type="text" id="sportType" class="form-control">
-                </div>
-                
-                <div class="mb-3">
-                    <label for="meals" class="form-label">🍽️ عدد الوجبات في اليوم:</label>
-                    <input type="number" id="meals" class="form-control" required>
-                </div>
-                
-                <button type="button" class="btn btn-success w-100" onclick="sendToWhatsApp()">📩 إرسال عبر واتساب</button>
+                <button type="button" class="btn btn-success w-100 mt-3" onclick="sendToWhatsApp()">📩 إرسال عبر واتساب</button>
             </form>
             
             <p class="text-muted text-center mt-3">🔹 ملاحظة: نحن لا نقدم علاجًا أو أنظمة غذائية علاجية.</p>
