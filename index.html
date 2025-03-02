@@ -12,6 +12,10 @@
         }
         .card {
             border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
         }
         .form-control:focus, .form-select:focus {
             border-color: #28a745;
@@ -24,6 +28,19 @@
         }
         .btn-success:hover {
             background: #218838;
+            transform: scale(1.02);
+        }
+        .form-control, .form-select {
+            transition: all 0.3s ease;
+        }
+        .sportType-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sportType-container.show {
+            display: block;
+            opacity: 1;
         }
     </style>
 </head>
@@ -63,7 +80,7 @@
                 <div class="mb-3">
                     <label for="status" class="form-label">📌 الحالة:</label>
                     <select id="status" class="form-select">
-                        <option value="عادي">عادي</option>
+                        <option value="عادي">طبيعي</option>
                         <option value="حامل">حامل</option>
                         <option value="مرضع">مرضع</option>
                     </select>
@@ -76,8 +93,7 @@
                         <option value="لا">لا</option>
                     </select>
                 </div>
-                
-                <div class="mb-3">
+                <div class="mb-3 sportType-container" id="sportTypeContainer">
                     <label for="sportType" class="form-label">⚽ ما نوع الرياضة؟</label>
                     <input type="text" id="sportType" class="form-control">
                 </div>
@@ -95,32 +111,79 @@
     </div>
     
     <script>
-        function sendToWhatsApp() {
-            let name = document.getElementById("name").value;
-            let weight = document.getElementById("weight").value;
-            let height = document.getElementById("height").value;
-            let age = document.getElementById("age").value;
-            let gender = document.getElementById("gender").value;
-            let status = document.getElementById("status").value;
-            let sport = document.getElementById("sport").value;
-            let sportType = document.getElementById("sportType").value;
-            let meals = document.getElementById("meals").value;
+        document.getElementById('sport').addEventListener('change', function() {
+            const sportTypeContainer = document.getElementById('sportTypeContainer');
+            if (this.value === 'نعم') {
+                sportTypeContainer.classList.add('show');
+                document.getElementById('sportType').setAttribute('required', '');
+            } else {
+                sportTypeContainer.classList.remove('show');
+                document.getElementById('sportType').removeAttribute('required');
+                document.getElementById('sportType').value = '';
+            }
+        });
+        
+        function validateForm() {
+            const requiredFields = ['name', 'weight', 'height', 'age', 'meals'];
+            const sport = document.getElementById('sport').value;
             
-            if (!name || !weight || !height || !age || !meals) {
+            if (sport === 'نعم' && !document.getElementById('sportType').value.trim()) {
                 Swal.fire({
                     icon: 'warning',
                     title: '⚠️ تنبيه!',
-                    text: 'يرجى ملء جميع الحقول المطلوبة.',
+                    text: 'يرجى تحديد نوع الرياضة.',
                 });
-                return;
+                return false;
             }
-            
-            let message = `👤 الاسم: ${name}%0A⚖️ الوزن: ${weight} كجم%0A📏 الطول: ${height} سم%0A🎂 العمر: ${age}%0A🚻 الجنس: ${gender}%0A📌 الحالة: ${status}%0A🏋️‍♂️ يمارس الرياضة: ${sport}%0A⚽ نوع الرياضة: ${sportType}%0A🍽️ عدد الوجبات: ${meals}`;
-            
-            let phoneNumber = "01127909244";
-            let whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
-            
-            window.open(whatsappURL, "_blank");
+        
+            for (let field of requiredFields) {
+                const value = document.getElementById(field).value.trim();
+                if (!value) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '⚠️ تنبيه!',
+                        text: 'يرجى ملء جميع الحقول المطلوبة.',
+                    });
+                    return false;
+                }
+            }
+        
+            return true;
+        }
+        
+        function sendToWhatsApp() {
+            if (!validateForm()) return;
+        
+            const btn = document.querySelector('.btn-success');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> جاري الإرسال...';
+            btn.disabled = true;
+        
+            setTimeout(() => {
+                let name = document.getElementById("name").value;
+                let weight = document.getElementById("weight").value;
+                let height = document.getElementById("height").value;
+                let age = document.getElementById("age").value;
+                let gender = document.getElementById("gender").value;
+                let status = document.getElementById("status").value;
+                let sport = document.getElementById("sport").value;
+                let sportType = document.getElementById("sportType").value;
+                let meals = document.getElementById("meals").value;
+                
+                let message = `👤 الاسم: ${name}%0A⚖️ الوزن: ${weight} كجم%0A📏 الطول: ${height} سم%0A🎂 العمر: ${age}%0A🚻 الجنس: ${gender}%0A📌 الحالة: ${status}%0A🏋️‍♂️ يمارس الرياضة: ${sport}%0A⚽ نوع الرياضة: ${sportType}%0A🍽️ عدد الوجبات: ${meals}`;
+                
+                let phoneNumber = "201127909244"; // Updated with Egypt's country code (20)
+                let whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+                
+                window.open(whatsappURL, "_blank");
+                
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+        
+                // Reset form after successful submission
+                document.getElementById("whatsappForm").reset();
+                document.getElementById("sportTypeContainer").classList.remove('show');
+            }, 1000);
         }
     </script>
     
