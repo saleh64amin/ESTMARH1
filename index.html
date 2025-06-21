@@ -204,12 +204,46 @@
     }
 
     function sendToWhatsApp() {
+      if (!validateForm()) { return; }
+      var name = document.getElementById("name").value;
+      var weight = document.getElementById("weight").value;
+      var height = document.getElementById("height").value;
+      var age = document.getElementById("age").value;
+      var gender = document.getElementById("gender").value;
+      var status = document.getElementById("status").value;
+      var job = document.getElementById("job").value;
+      var sport = document.getElementById("sport").value;
+      var sportType = document.getElementById("sportType").value;
+      var meals = document.getElementById("meals").value;
+      var dairy = document.getElementById("dairy").value;
+      var sportDays = document.getElementById("sportDays").value;
+      var highProtein = document.getElementById("highProtein").value;
+
+      var message = '👤 الاسم: ' + name + '%0A⚖️ الوزن: ' + weight + ' كجم%0A📏 الطول: ' + height + ' سم%0A🎂 العمر: ' + age + '%0A🚻 الجنس: ' + gender + '%0A📌 الحالة: ' + status + '%0A💼 المهنة: ' + job + '%0A🏋️‍♂️ يمارس الرياضة: ' + sport;
+      if (sport === 'نعم') {
+        message += '%0A⚽ نوع الرياضة: ' + sportType;
+      }
+      message += '%0A🍽️ عدد الوجبات: ' + meals;
+      message += '%0A🥛 تفضيل منتجات الحليب: ' + dairy;
+      message += '%0A📅 أيام ممارسة الرياضة في الأسبوع: ' + sportDays;
+      message += '%0A🥩 تفضيل بروتين ولحوم عالي: ' + highProtein;
+
+      var phoneNumber = '201127909244';
+      var whatsappURL = 'https://wa.me/' + phoneNumber + '?text=' + message;
+
+      // استخدم التنقل في نفس النافذة لضمان عمله في Safari والأجهزة المحمولة.
+      window.location.href = whatsappURL;
+
+      // إعادة تعيين النموذج بعد محاولة الإرسال (لن تُنفّذ عند انتقال الصفحة ولكن كحماية).
+      document.getElementById("whatsappForm").reset();
+      document.getElementById("sportTypeContainer").classList.remove('show');
+    }
       if (!validateForm()) return;
       
-      var btn = document.querySelector('.btn-success');
-      var originalText = btn.innerHTML;
-      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> جاري الإرسال...';
-      btn.disabled = true;
+      
+      
+      
+      
       
       setTimeout(function() {
         var name = document.getElementById("name").value;
@@ -238,12 +272,12 @@
         var phoneNumber = '201127909244';
         var whatsappURL = 'https://wa.me/' + phoneNumber + '?text=' + message;
         
-        window.open(whatsappURL, "_blank");
-        btn.innerHTML = originalText;
-        btn.disabled = false;
+        
+        
+        
         document.getElementById("whatsappForm").reset();
         document.getElementById("sportTypeContainer").classList.remove('show');
-      }, 1000);
+      
     }
   </script>
   
